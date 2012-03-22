@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     url(r'^salon/(?P<salon_id>[\w\d]+)/delete/$',              'fedclub.salon.views.salon_delete'),
 
 	# many users
-    url(r'^salon/(?P<salon_id>[\w\d]+)/users/$',              'fedclub.salon.views.user_list'),
+    url(r'^salon/(?P<salon_id>[\w\d]+)/users/$',              'fedclub.salon.views.users_list'),
     url(r'^salon/(?P<salon_id>[\w\d]+)/users/delete$',        'fedclub.salon.views.users_delete'),
     url(r'^salon/(?P<salon_id>[\w\d]+)/users/accept$',        'fedclub.salon.views.users_accept'),
     url(r'^salon/(?P<salon_id>[\w\d]+)/users/reject$',        'fedclub.salon.views.users_reject'),

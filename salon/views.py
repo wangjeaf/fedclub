@@ -31,8 +31,8 @@ def salon_delete(request, salon_id):
 
 # many users
 # ^salon/(?P<salon_id>[\w\d]+)/users/$
-def user_list(request, salon_id):
-	return HttpResponse('user_list')
+def users_list(request, salon_id):
+	return HttpResponse('users_list')
 
 #^salon/(?P<salon_id>[\w\d]+)/users/delete$
 def users_delete(request, salon_id):
