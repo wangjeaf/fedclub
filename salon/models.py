@@ -1,5 +1,6 @@
 #encoding=utf-8
 from django.db import models
+import datetime
 
 # Create your models here.
 class Salon(models.Model):
@@ -18,6 +19,26 @@ class Salon(models.Model):
 	#活动地址
 	address = models.CharField(max_length = 200)
 
+	def is_finished(self):
+		return self.end_time < datetime.datetime.today()
+	def is_not_start(self):
+		return self.start_time > datetime.datetime.today()
+	def is_active(self):
+		return self.start_time < datetime.datetime.today() < self.end_time
+
+	def get_status(self):
+		if (self.is_finished()):
+			return 'finished'
+		elif (self.is_not_start()):
+			return 'not-start'
+		elif (self.is_active()):
+			return 'active'
+		else:
+			return 'unknown'
+
+	def __unicode__(self):
+		return "%s" % (self.name)
+
 class User(models.Model):
 	#主键
 	user_id = models.AutoField(primary_key = True)
@@ -29,7 +50,7 @@ class User(models.Model):
 	#姓名
 	name = models.CharField(max_length = 40) 
 	#手机号
-	mobile = models.PositiveIntegerField(null=True)
+	mobile = models.CharField(null=True, max_length = 11)
 	#邮件
 	email = models.EmailField()	
 	#公司名
@@ -43,4 +64,32 @@ class User(models.Model):
 	# 3、已同意已发邮件 11
 	# 4、已拒绝未发邮件 20
 	# 5、已拒绝已发邮件 21
-	status = models.SmallIntegerField()
+	status = models.SmallIntegerField(default = 00)
+
+	def get_status(self):
+		if (self.not_handled()):
+			return 'not-handled'
+		elif (self.accepted()):
+			if (self.emailed()):
+				return 'accepted&emailed'
+			elif (self.not_emailed()):
+				return 'accepted&not-emailed'
+		elif (self.rejected()):
+			if (self.emailed()):
+				return 'rejected&emailed'
+			elif (self.not_emailed()):
+				return 'rejected&not-emailed'
+
+	def not_handled(self):
+		return self.status == 0
+	def accepted(self):
+		return self.status / 10 == 1
+	def rejected(self):
+		return self.status / 10 == 2
+	def emailed(self):
+		return self.status % 10 == 1
+	def not_emailed(self):
+		return self.status % 10 == 0
+
+	def __unicode__(self):
+		return "%s(from %s), %s, %s, %s" % (self.name, self.company, self.mobile, self.email, self.introduction)

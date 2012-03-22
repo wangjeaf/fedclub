@@ -115,6 +115,9 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+	# USER ADDED
+    'django.contrib.admin',
 	'salon',
 	'list',
 	'mail',

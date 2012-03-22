@@ -1,0 +1,9 @@
+{% if salons %}
+	沙龙:<br>
+	<ul>
+		{% for salon in salons %}
+		<li><a href='/salons/{{salon.id}}/'>{{salon.name}}({{salon.description}})</a></li>
+		{% endfor %}
+	</ul>
+{% endif %}
+<p> <a href='/salons/add'>增加沙龙</a></p>
