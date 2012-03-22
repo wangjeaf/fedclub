@@ -6,11 +6,11 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$',                                                                  'fedclub.salon.views.home', name='home'),
+    url(r'^$',                                                 'fedclub.salon.views.home', name='home'),
 
 	# salon
     url(r'^salon/$',                                           'fedclub.salon.views.salon_list'),
-    url(r'^salon/add/$', 					                   'fedclub.salon.views.salon_add'),
+    url(r'^salon/add/$',                                       'fedclub.salon.views.salon_add'),
     url(r'^salon/(?P<salon_id>[\w\d]+)/$',                     'fedclub.salon.views.salon_get'),
     url(r'^salon/(?P<salon_id>[\w\d]+)/update/$',              'fedclub.salon.views.salon_update'),
     url(r'^salon/(?P<salon_id>[\w\d]+)/delete/$',              'fedclub.salon.views.salon_delete'),
