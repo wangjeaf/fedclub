@@ -105,3 +105,41 @@ class User(models.Model):
 
 	def __unicode__(self):
 		return "%s(from %s), %s, %s, %s" % (self.name, self.company, self.mobile, self.email, self.introduction)
+
+	#接受user_id指定用户的申请	
+	@classmethod
+	def accept(cls,user_id):
+		cls.__set_accept_flag__(ser_id,10)
+		
+	#拒绝user_id指定用户的申请	
+	@classmethod
+	def reject(cls,user_id):
+		cls.__set_accept_flag__(user_id,20)
+
+	#设置user_id指定用户状态为已发送邮件	
+	@classmethod
+	def mailed(cls,user_id):
+		cls.__set_mail_flag__(user_id,1)
+
+	#设置user_id指定用户状态为未发送邮件	
+	@classmethod
+	def unmailed(cls,user_id):
+		cls.__set_mail_flag__(user_id,0)
+
+	@classmethod
+	def __set_mail_flag__(cls,user_id,flag_num):
+		user = cls.objects.get(user_id=user_id)
+		flag = user.status
+	        flag = flag / 10 * 10 + flag_num 
+		user.status = flag
+		user.save()
+
+	@classmethod
+        def __set_accept_flag__(cls,user_id,flag_num):
+		user = cls.objects.get(user_id=user_id)
+		flag = user.status
+	        flag = flag % 10 + flag_num 
+		user.status = flag
+                user.save()
+
+                	
