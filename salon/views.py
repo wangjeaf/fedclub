@@ -117,10 +117,12 @@ def user_update(request, salon_id, user_id):
 
 # ^salon/(?P<salon_id>[\w\d]+)/user/(?P<user_id>[\w\d]+)/accept$
 def user_accept(request, salon_id, user_id):
+	User.accept(user_id);
 	return HttpResponse('user_accept')
 
 # ^salon/(?P<salon_id>[\w\d]+)/user/(?P<user_id>[\w\d]+)/reject$
 def user_reject(request, salon_id, user_id):
+	User.reject(user_id);
 	return HttpResponse('user_reject')
 
 # ^salon/(?P<salon_id>[\w\d]+)/user/(?P<user_id>[\w\d]+)/email$

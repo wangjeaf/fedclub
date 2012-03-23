@@ -39,9 +39,9 @@
 				<td>{{user.introduction}}</td>
 				<td>{{user.barcode}}</td>
 				<td>{{user.status}}</td>
-				<td><a href='/salon/{{salon.code}}/users/{{user.user_id}}/delete'>删除</a>, 
-					<a href='/salon/{{salon.code}}/users/{{user.user_id}}/accept'>通过</a>, 
-					<a href='/salon/{{salon.code}}/users/{{user.user_id}}/reject'>拒绝</a></td>
+				<td><a href='/salon/{{salon.code}}/user/{{user.user_id}}/delete'>删除</a>, 
+					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/accept'>通过</a>, 
+					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/reject'>拒绝</a></td>
 			</tr>
 			{% endfor %}
 		</tr>
@@ -73,7 +73,7 @@
 				<td>{{user.introduction}}</td>
 				<td>{{user.barcode}}</td>
 				<td>{{user.status}}</td>
-				<td><a href='/salon/{{salon.code}}/users/{{user.user_id}}/delete'>删除</a>, 
+				<td><a href='/salon/{{salon.code}}/user/{{user.user_id}}/delete'>删除</a>, 
 					<a href=''>通过</a>, <a href=''>拒绝</a></td>
 			</tr>
 			{% endfor %}
@@ -106,7 +106,7 @@
 				<td>{{user.introduction}}</td>
 				<td>{{user.barcode}}</td>
 				<td>{{user.status}}</td>
-				<td><a href='/salon/{{salon.salon_id}}/users/{{user.user_id}}/delete'>删除</a>, <a href=''>通过</a>, <a href=''>拒绝</a></td>
+				<td><a href='/salon/{{salon.salon_id}}/user/{{user.user_id}}/delete'>删除</a>, <a href=''>通过</a>, <a href=''>拒绝</a></td>
 			</tr>
 			{% endfor %}
 		</tr>

@@ -112,7 +112,7 @@ class User(models.Model):
 	#接受user_id指定用户的申请	
 	@classmethod
 	def accept(cls,user_id):
-		cls.__set_accept_flag__(ser_id,10)
+		cls.__set_accept_flag__(user_id,10)
 		
 	#拒绝user_id指定用户的申请	
 	@classmethod
