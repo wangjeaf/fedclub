@@ -5,9 +5,14 @@ from django.template import Context, loader
 from salon.models import Salon, User
 
 from salon.utils import get_bar_code, send_mail
-
 # ^$
 def home(request):
+	get_bar_code('RENREN', 'F32321D')
+	get_bar_code('FED', 'FDKJ32123')
+
+	send_mail('RENREN', 'test', 'F32321D')
+	send_mail('FED', 'test', 'FDKJ32123')
+
 	salons = Salon.objects.all()
 	t = loader.get_template('index.html')
 	c = Context({
