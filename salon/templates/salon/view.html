@@ -29,7 +29,7 @@
 		</tr>
 	</thead>
 	<tbody>
-			{% for user in users %}
+			{% for user in untreated_users %}
 			<tr>
 				<td><input type="checkbox" name="select_users" value="{{user.user_id}}"/></td>
 				<td>{{user.name}}</td>
@@ -63,7 +63,7 @@
 		</tr>
 	</thead>
 	<tbody>
-			{% for user in users %}
+			{% for user in accepted_users %}
 			<tr>
 				<td><input type="checkbox" name="select_users" value="{{user.user_id}}"/></td>
 				<td>{{user.name}}</td>
@@ -74,7 +74,8 @@
 				<td>{{user.barcode}}</td>
 				<td>{{user.status}}</td>
 				<td><a href='/salon/{{salon.code}}/user/{{user.user_id}}/delete'>删除</a>, 
-					<a href=''>通过</a>, <a href=''>拒绝</a></td>
+						<a href='/salon/{{salon.code}}/user/{{user.user_id}}/accept'>通过</a>, 
+					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/reject'>拒绝</a></td>
 			</tr>
 			{% endfor %}
 		</tr>
@@ -96,7 +97,7 @@
 		</tr>
 	</thead>
 	<tbody>
-			{% for user in users %}
+			{% for user in rejected_users %}
 			<tr>
 				<td><input type="checkbox" name="select_users" value="{{user.user_id}}"/></td>
 				<td>{{user.name}}</td>
@@ -106,7 +107,9 @@
 				<td>{{user.introduction}}</td>
 				<td>{{user.barcode}}</td>
 				<td>{{user.status}}</td>
-				<td><a href='/salon/{{salon.salon_id}}/user/{{user.user_id}}/delete'>删除</a>, <a href=''>通过</a>, <a href=''>拒绝</a></td>
+				<td><a href='/salon/{{salon.salon_id}}/user/{{user.user_id}}/delete'>删除</a>,
+					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/accept'>通过</a>, 
+					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/reject'>拒绝</a></td>
 			</tr>
 			{% endfor %}
 		</tr>

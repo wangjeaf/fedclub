@@ -109,6 +109,17 @@ class User(models.Model):
 	def __unicode__(self):
 		return "%s(from %s), %s, %s, %s" % (self.name, self.company, self.mobile, self.email, self.introduction)
 
+	@classmethod
+	def get_untreated(cls):
+		return cls.objects.filter(status =0)
+
+	@classmethod
+	def get_accepted(cls):
+		return cls.objects.filter(status__gt = 9,status__lt = 20)
+
+	@classmethod
+	def get_rejected(cls):
+		return cls.objects.filter(status__gt = 19)	
 	#接受user_id指定用户的申请	
 	@classmethod
 	def accept(cls,user_id):
