@@ -6,6 +6,9 @@ import datetime
 class Salon(models.Model):
 	#主键
 	salon_id = models.AutoField(primary_key = True)
+
+	#沙龙对应的编码（用于在url中显示沙龙相关信息）
+	code = models.CharField(max_length = 40)
 	#活动名称
 	name = models.CharField(max_length = 100)
 	#开始时间

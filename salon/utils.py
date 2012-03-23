@@ -9,10 +9,20 @@ from email.MIMEMultipart import MIMEMultipart
 from email.Header import Header  
 import urllib
 import os
+import hashlib
 from salon.models import Salon, User
 
 google_chart_api_url = 'http://chart.apis.google.com/chart?cht=qr&chs=150x150&chl='
 check_in_url = 'http://fed.d.xiaonei.com/salon/%s/users/checkin?barcode=%s'
+
+# 生成text对应的md5编码的前六位
+# text是由沙龙名称、用户名称、用户邮箱组合确定的
+def gen_barcode_md5(text):
+	m = hashlib.md5()
+	m.update(text)
+	result = m.hexdigest()
+	# 加密以后取前六位 
+	return result[:6]
 
 # 确保content是一个带唯一身份认证的url信息，扫描后可直接点击
 def get_bar_code(salon_id, barcode):
@@ -84,4 +94,6 @@ if __name__ == '__main__':
 
 	send_mail('RENREN', 'test', 'F32321D')
 	send_mail('FED', 'test', 'FDKJ32123')
+
+	print gen_barcode_md5('FED_Salon_wangjeaf_wangjeaf@gmail.com')
 

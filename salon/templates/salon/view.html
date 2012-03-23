@@ -1,6 +1,7 @@
 <a href='/'>返回首页</a><hr>
 沙龙信息:
 <table border = 1>
+	<tr><td>代号<td>{{salon.code}}</td></tr>
 	<tr><td>名称<td>{{salon.name}}</td></tr>
 	<tr><td>开始时间<td>{{salon.start_time}}</td></tr>
 	<tr><td>结束时间<td>{{salon.end_time}}</td></tr>
@@ -38,9 +39,9 @@
 				<td>{{user.introduction}}</td>
 				<td>{{user.barcode}}</td>
 				<td>{{user.status}}</td>
-				<td><a href='/salon/{{salon.salon_id}}/users/{{user.user_id}}/delete'>删除</a>, 
-					<a href='/salon/{{salon.salon_id}}/users/{{user.user_id}}/accept'>通过</a>, 
-					<a href='/salon/{{salon.salon_id}}/users/{{user.user_id}}/reject'>拒绝</a></td>
+				<td><a href='/salon/{{salon.code}}/users/{{user.user_id}}/delete'>删除</a>, 
+					<a href='/salon/{{salon.code}}/users/{{user.user_id}}/accept'>通过</a>, 
+					<a href='/salon/{{salon.code}}/users/{{user.user_id}}/reject'>拒绝</a></td>
 			</tr>
 			{% endfor %}
 		</tr>
@@ -72,7 +73,7 @@
 				<td>{{user.introduction}}</td>
 				<td>{{user.barcode}}</td>
 				<td>{{user.status}}</td>
-				<td><a href='/salon/{{salon.salon_id}}/users/{{user.user_id}}/delete'>删除</a>, 
+				<td><a href='/salon/{{salon.code}}/users/{{user.user_id}}/delete'>删除</a>, 
 					<a href=''>通过</a>, <a href=''>拒绝</a></td>
 			</tr>
 			{% endfor %}

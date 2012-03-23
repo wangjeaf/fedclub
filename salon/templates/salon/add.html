@@ -1,6 +1,7 @@
 <form action="/salon/add/" method="post">
 	{% csrf_token %}
 	<input type="hidden" name="edit_type" value="add" />
+	<label for="code">代号：</label><input type="text" name="code"/><br />
 	<label for="name">名称：</label><input type="text" name="name"/><br />
 	<label for="start_time">开始时间：</label><input type="text" name="start_time"/>(格式示例：2012-01-01 12:00 或者 2012-01-01)<br />
 	<label for="end_time">结束时间：</label><input type="text" name="end_time"/>(格式示例：2012-01-02 12:00 或者 2012-01-02)<br />

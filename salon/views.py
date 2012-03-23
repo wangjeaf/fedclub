@@ -3,7 +3,7 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import Context, loader
 from salon.models import Salon, User
-from salon.utils import get_bar_code, send_mail
+from salon.utils import get_bar_code, send_mail, gen_barcode_md5
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
@@ -26,6 +26,7 @@ def salon_add(request):
 		return render_to_response('salon/add.html', {}, context_instance=RequestContext(request))
 	else:
 		salon = Salon()
+		salon.code = request.POST['code']
 		salon.name = request.POST['name']
 		salon.start_time = request.POST['start_time']
 		salon.end_time = request.POST['end_time']
@@ -37,8 +38,8 @@ def salon_add(request):
 
 # ^salon/(?P<salon_id>[\w\d]+)/$
 def salon_get(request, salon_id):
-	salon = Salon.objects.get(salon_id = salon_id)
-	users = User.objects.filter(salon = salon_id)
+	salon = Salon.objects.get(code = salon_id)
+	users = User.objects.filter(salon = salon.salon_id)
 	return render_to_response('salon/view.html', {'salon':salon, 'users':users})
 
 # ^salon/(?P<salon_id>[\w\d]+)/update/$
@@ -46,7 +47,7 @@ def salon_update(request, salon_id):
 	return HttpResponse('salon_update')
 # ^salon/(?P<salon_id>[\w\d]+)/delete/$
 def salon_delete(request, salon_id):
-	salon = Salon.objects.get(salon_id = salon_id)
+	salon = Salon.objects.get(code = salon_id)
 	salon_name = salon.name
 	salon.delete()
 	return render_to_response('salon/delete_success.html', {'salon_name':salon_name})

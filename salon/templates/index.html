@@ -2,7 +2,7 @@
 	沙龙(点击沙龙链接，查看沙龙详细信息与对应的注册用户信息):<br>
 	<ul>
 		{% for salon in salons %}
-		<li><a href='/salon/{{salon.salon_id}}/'>{{salon.name}}({{salon.description}})</a>&nbsp;<a href='javascript:void()' onclick='deleteSalon({{salon.salon_id}})'>删除</a></li>
+		<li><a href='/salon/{{salon.code}}/'>{{salon.name}}({{salon.description}})</a>&nbsp;<a href='javascript:void()' onclick='deleteSalon("{{salon.code}}")'>删除</a></li>
 		{% endfor %}
 	</ul>
 {% else %}
