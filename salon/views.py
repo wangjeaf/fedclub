@@ -3,29 +3,22 @@
 from django.http import HttpResponse
 from django.template import Context, loader
 from salon.models import Salon, User
-
 from salon.utils import get_bar_code, send_mail
+from django.shortcuts import render_to_response
+
 # ^$
 def home(request):
-	get_bar_code('RENREN', 'F32321D')
-	get_bar_code('FED', 'FDKJ32123')
-
-	send_mail('RENREN', 'test', 'F32321D')
-	send_mail('FED', 'test', 'FDKJ32123')
-
 	salons = Salon.objects.all()
-	t = loader.get_template('index.html')
-	c = Context({
-		'salons' : salons
-	})
-	return HttpResponse(t.render(c))
+	return render_to_response('index.html', {'salons': salons})
 
 # ^salon/$
 def salon_list(request):
 	return HttpResponse('salon_list')
 # ^salon/add/
 def salon_add(request):
-	return HttpResponse('salon_add')
+	t = loader.get_template('salon/add.html')
+	c = Context({})
+	return HttpResponse(t.render(c))
 # ^salon/(?P<salon_id>[\w\d]+)/$
 def salon_get(request, salon_id):
 	return HttpResponse('salon_get')
