@@ -1,0 +1,116 @@
+<a href='/'>返回首页</a><hr>
+沙龙信息:
+<table border = 1>
+	<tr><td>名称<td>{{salon.name}}</td></tr>
+	<tr><td>开始时间<td>{{salon.start_time}}</td></tr>
+	<tr><td>结束时间<td>{{salon.end_time}}</td></tr>
+	<tr><td>创建人<td>{{salon.creator}}</td></tr>
+	<tr><td>描述<td>{{salon.description}}</td></tr>
+	<tr><td>活动地址<td>{{salon.address}}</td></tr>
+<table>
+<hr>
+{% if not users %}
+还没有任何注册用户，点“增加用户”添加一个吧
+{% else %}
+<b>未处理用户信息：</b>
+<table border = 1>
+	<thead>
+		<tr>
+			<td><input type="checkbox" name="select_all"/>全选</td>
+			<td>姓名</td>
+			<td>公司名</td>
+			<td>手机</td>
+			<td>邮箱</td>
+			<td>自我介绍</td>
+			<td>二维码</td>
+			<td>状态</td>
+			<td>操作</td>
+		</tr>
+	</thead>
+	<tbody>
+			{% for user in users %}
+			<tr>
+				<td><input type="checkbox" name="select_users" value="{{user.user_id}}"/></td>
+				<td>{{user.name}}</td>
+				<td>{{user.company}}</td>
+				<td>{{user.mobile}}</td>
+				<td>{{user.email}}</td>
+				<td>{{user.introduction}}</td>
+				<td>{{user.barcode}}</td>
+				<td>{{user.status}}</td>
+				<td><a href='/salon/{{salon.salon_id}}/users/{{user.user_id}}/delete'>删除</a>, 
+					<a href='/salon/{{salon.salon_id}}/users/{{user.user_id}}/accept'>通过</a>, 
+					<a href='/salon/{{salon.salon_id}}/users/{{user.user_id}}/reject'>拒绝</a></td>
+			</tr>
+			{% endfor %}
+		</tr>
+	</tbody>
+</table>
+<br><hr><b>已同意用户信息：</b>
+<table border = 1>
+	<thead>
+		<tr>
+			<td><input type="checkbox" name="select_all"/>全选</td>
+			<td>姓名</td>
+			<td>公司名</td>
+			<td>手机</td>
+			<td>邮箱</td>
+			<td>自我介绍</td>
+			<td>二维码</td>
+			<td>状态</td>
+			<td>操作</td>
+		</tr>
+	</thead>
+	<tbody>
+			{% for user in users %}
+			<tr>
+				<td><input type="checkbox" name="select_users" value="{{user.user_id}}"/></td>
+				<td>{{user.name}}</td>
+				<td>{{user.company}}</td>
+				<td>{{user.mobile}}</td>
+				<td>{{user.email}}</td>
+				<td>{{user.introduction}}</td>
+				<td>{{user.barcode}}</td>
+				<td>{{user.status}}</td>
+				<td><a href='/salon/{{salon.salon_id}}/users/{{user.user_id}}/delete'>删除</a>, 
+					<a href=''>通过</a>, <a href=''>拒绝</a></td>
+			</tr>
+			{% endfor %}
+		</tr>
+	</tbody>
+</table>
+<br><hr><b>已拒绝用户信息：</b>
+<table border = 1>
+	<thead>
+		<tr>
+			<td><input type="checkbox" name="select_all"/>全选</td>
+			<td>姓名</td>
+			<td>公司名</td>
+			<td>手机</td>
+			<td>邮箱</td>
+			<td>自我介绍</td>
+			<td>二维码</td>
+			<td>状态</td>
+			<td>操作</td>
+		</tr>
+	</thead>
+	<tbody>
+			{% for user in users %}
+			<tr>
+				<td><input type="checkbox" name="select_users" value="{{user.user_id}}"/></td>
+				<td>{{user.name}}</td>
+				<td>{{user.company}}</td>
+				<td>{{user.mobile}}</td>
+				<td>{{user.email}}</td>
+				<td>{{user.introduction}}</td>
+				<td>{{user.barcode}}</td>
+				<td>{{user.status}}</td>
+				<td><a href='/salon/{{salon.salon_id}}/users/{{user.user_id}}/delete'>删除</a>, <a href=''>通过</a>, <a href=''>拒绝</a></td>
+			</tr>
+			{% endfor %}
+		</tr>
+	</tbody>
+</table>
+{% endif %}
+<hr>
+<a href='/salon/{{salon.salon_id}}/users/add/'>增加用户</a>

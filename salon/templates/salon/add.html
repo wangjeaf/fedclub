@@ -1,1 +1,12 @@
-fdjlajfdal
+<form action="/salon/add/" method="post">
+	{% csrf_token %}
+	<input type="hidden" name="edit_type" value="add" />
+	<label for="name">名称：</label><input type="text" name="name"/><br />
+	<label for="start_time">开始时间：</label><input type="text" name="start_time"/>(格式示例：2012-01-01 12:00 或者 2012-01-01)<br />
+	<label for="end_time">结束时间：</label><input type="text" name="end_time"/>(格式示例：2012-01-02 12:00 或者 2012-01-02)<br />
+	<label for="creator">创建人：</label><input type="text" name="creator"/><br />
+	<label for="description">描述：</label><input type="text" name="description"/><br />
+	<label for="address">活动地址：</label><input type="text" name="address"/><br />
+<input type="submit" value="提交" />
+</form>
+

@@ -1,0 +1,12 @@
+<form action="/salon/{{salon_id}}/users/add/" method="post">
+	{% csrf_token %}
+	<input type="hidden" name="edit_type" value="add" />
+	<input type="hidden" name="salon" value="{{salon_id}}" />
+	<label for="name">姓名：</label><input type="text" name="name"/><br />
+	<label for="company">公司名：</label><input type="text" name="company"/><br />
+	<label for="mobile">手机：</label><input type="text" name="mobile"/>(格式示例：13800138000)<br />
+	<label for="email">邮箱：</label><input type="text" name="email"/>(格式示例：no-reply.fed@renren-inc.com)<br />
+	<label for="introduction">自我介绍：</label><input type="text" name="introduction"/><br />
+<input type="submit" value="提交" />
+</form>
+

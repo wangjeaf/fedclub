@@ -1,0 +1,44 @@
+<a href='/'>返回首页</a><hr>
+沙龙信息:
+<table border = 1>
+	<tr><td>名称<td>{{salon.name}}</td></tr>
+	<tr><td>开始时间<td>{{salon.start_time}}</td></tr>
+	<tr><td>结束时间<td>{{salon.end_time}}</td></tr>
+	<tr><td>创建人<td>{{salon.creator}}</td></tr>
+	<tr><td>描述<td>{{salon.description}}</td></tr>
+	<tr><td>活动地址<td>{{salon.address}}</td></tr>
+<table>
+<hr>
+{% if not users %}
+还没有任何注册用户，点“增加用户”添加一个吧
+{% else %}
+用户信息：
+<table border = 1>
+	<thead>
+		<tr>
+			<td>选择</td>
+			<td>姓名</td>
+			<td>公司名</td>
+			<td>手机</td>
+			<td>邮箱</td>
+			<td>自我介绍</td>
+			<td>二维码</td>
+			<td>状态</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><input type="checkbox" name="select_users"/></td>
+			<td>王致富</td>
+			<td>RENREN</td>
+			<td>fjdaljfd</td>
+			<td>fdasfdas</td>
+			<td>fdafda</td>
+			<td>fdasfda</td>
+			<td>fda</td>
+		</tr>
+	</tbody>
+</table>
+{% endif %}
+<hr>
+<a href='/salon/{{salon.salon_id}}/users/add/'>增加用户</a>

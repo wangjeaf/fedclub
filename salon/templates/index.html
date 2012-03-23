@@ -1,9 +1,18 @@
 {% if salons %}
-	沙龙:<br>
+	沙龙(点击沙龙链接，查看沙龙详细信息与对应的注册用户信息):<br>
 	<ul>
 		{% for salon in salons %}
-		<li><a href='/salon/{{salon.id}}/'>{{salon.name}}({{salon.description}})</a></li>
+		<li><a href='/salon/{{salon.salon_id}}/'>{{salon.name}}({{salon.description}})</a>&nbsp;<a href='javascript:void()' onclick='deleteSalon({{salon.salon_id}})'>删除</a></li>
 		{% endfor %}
 	</ul>
+{% else %}
+没有任何沙龙信息，点击“增加沙龙”添加一个吧
 {% endif %}
 <p> <a href='/salon/add'>增加沙龙</a></p>
+<script>
+	function deleteSalon(salon_id) {
+		if (confirm('确定要删除此记录么?')) {
+			window.location.href = '/salon/' + salon_id + '/delete'
+		}
+	}
+</script>
