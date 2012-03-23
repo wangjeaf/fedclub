@@ -58,27 +58,37 @@ class User(models.Model):
 	#自我介绍
 	introduction = models.CharField(null=True, max_length = 200) 
 
+	# 注册时间
+	register_time = models.DateTimeField()
+
 	#处理状态
 	# 1、未处理 00
 	# 2、已同意未发邮件 10
 	# 3、已同意已发邮件 11
-	# 4、已拒绝未发邮件 20
-	# 5、已拒绝已发邮件 21
+	# 4、已同意已发邮件已签到   12
+	# 5、已拒绝未发邮件 20
+	# 6、已拒绝已发邮件 21
 	status = models.SmallIntegerField(default = 00)
-
+	
+	#二维码
+	barcode = models.CharField(null = True, max_length = 40) 
+	
 	def get_status(self):
 		if (self.not_handled()):
-			return 'not-handled'
+			return 'not-handle'
 		elif (self.accepted()):
 			if (self.emailed()):
-				return 'accepted&emailed'
+				if (self.checkined()):
+					return 'checkin'
+				else:
+					return 'accept&email'
 			elif (self.not_emailed()):
-				return 'accepted&not-emailed'
+				return 'accept&not-email'
 		elif (self.rejected()):
 			if (self.emailed()):
-				return 'rejected&emailed'
+				return 'reject&email'
 			elif (self.not_emailed()):
-				return 'rejected&not-emailed'
+				return 'reject&not-email'
 
 	def not_handled(self):
 		return self.status == 0
@@ -87,9 +97,11 @@ class User(models.Model):
 	def rejected(self):
 		return self.status / 10 == 2
 	def emailed(self):
-		return self.status % 10 == 1
+		return self.status % 10 > 0
 	def not_emailed(self):
 		return self.status % 10 == 0
+	def checkined(self):
+		return self.status % 10 == 2
 
 	def __unicode__(self):
 		return "%s(from %s), %s, %s, %s" % (self.name, self.company, self.mobile, self.email, self.introduction)

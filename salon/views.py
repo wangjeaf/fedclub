@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from django.template import Context, loader
 from salon.models import Salon, User
 
+from salon.utils import get_bar_code, send_mail
+
 # ^$
 def home(request):
 	salons = Salon.objects.all()
@@ -94,4 +96,7 @@ def user_reject_email(request, salon_id, user_id):
 # check in, by barcode
 # ^salon/(?P<salon_id>[\w\d]+)/users/(?P<user_id>[\w\d]+)/checkin$
 def checkin(request, salon_id, user_id):
+	return HttpResponse('checkin')
+
+def checkin_manual(request, salon_id):
 	return HttpResponse('checkin')

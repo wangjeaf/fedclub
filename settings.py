@@ -119,9 +119,6 @@ INSTALLED_APPS = (
 	# USER ADDED
     'django.contrib.admin',
 	'salon',
-	'list',
-	'mail',
-	'barcode',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
