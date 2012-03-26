@@ -66,8 +66,8 @@ def send_mail(salon, user):
 	msg_root.attach(image_att)
 
 	# to
-	to_list = ('zhifu.wang@renren-inc.com', 'wentao.zhang@renren-inc.com;')
-	# to_list = 'zhifu.wang@renren-inc.com'
+	# to_list = ('zhifu.wang@renren-inc.com', 'wentao.zhang@renren-inc.com;')
+	to_list = user.email
 
 	# from
 	me = 'no-reply.fed' + "<no-reply.fed@renren-inc.com>"
