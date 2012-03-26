@@ -38,7 +38,7 @@ urlpatterns = patterns('fedclub.salon.views',
     url(r'^salon/(?P<salon_id>[\w\d]+)/user/(?P<user_id>[\w\d]+)/reject_email/$','user_reject_email'),
 
 	# check in, by barcode
-    url(r'^salon/(?P<salon_id>[\w\d]+)/checkin_manual$',            'checkin_manual'),
+    url(r'^salon/(?P<salon_code>[\w\d]+)/checkin_manual$',            'checkin_manual'),
     url(r'^salon/(?P<salon_code>[\w\d]+)/checkin$',                   'checkin'),
 )
 
