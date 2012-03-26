@@ -224,14 +224,12 @@ def user_reject_email(request, salon_id, user_id):
 
 # check in, by barcode
 # ^salon/(?P<salon_id>[\w\d]+)/user/(?P<user_id>[\w\d]+)/checkin$
-def checkin(request, salon_id,user_id):
-	salon = Salon.objects.get(salon_id = salon_id)
-	checking_user = User.objects(salon = salon,user_id = user_id)
-	if checking_user.barcode == request.GET('barcode'):
-		User.checkined(checking_user.user_id)
-		return HttpResponse('checkin')
-	else:
-		return HttpResponse('barcode not matched')
+def checkin(request, salon_code):
+	barcode = request.GET['barcode']
+	salon = Salon.objects.get(code = salon_code)
+	checking_user = User.objects.get(salon = salon,barcode=barcode)
+	User.checkined(checking_user.user_id)
+	return HttpResponse('checkin')
 
 def checkin_manual(request, salon_id):
 	return HttpResponse('checkin')
