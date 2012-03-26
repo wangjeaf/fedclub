@@ -110,16 +110,16 @@ class User(models.Model):
 		return "%s(from %s), %s, %s, %s" % (self.name, self.company, self.mobile, self.email, self.introduction)
 
 	@classmethod
-	def get_untreated(cls):
-		return cls.objects.filter(status =0)
+	def get_untreated(cls, salon_id):
+		return cls.objects.filter(salon = salon_id, status = 0)
 
 	@classmethod
-	def get_accepted(cls):
-		return cls.objects.filter(status__gt = 9,status__lt = 20).order_by('status')
+	def get_accepted(cls, salon_id):
+		return cls.objects.filter(salon = salon_id,status__gt = 9,status__lt = 20).order_by('status')
 
 	@classmethod
-	def get_rejected(cls):
-		return cls.objects.filter(status__gt = 19).order_by('status')
+	def get_rejected(cls, salon_id):
+		return cls.objects.filter(salon = salon_id,status__gt = 19).order_by('status')
 
 	#接受user_id指定用户的申请	
 	@classmethod

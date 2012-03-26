@@ -39,12 +39,10 @@ def salon_add(request):
 # ^salon/(?P<salon_id>[\w\d]+)/$
 def salon_get(request, salon_id):
 	salon = Salon.objects.get(code = salon_id)
-	users = User.objects.filter(salon = salon.salon_id)
-	untreated_users = User.get_untreated()
-	accepted_users = User.get_accepted()
-	rejected_users = User.get_rejected()
-	print 'untreat:'+ str(len(untreated_users))
-	return render_to_response('salon/view.html', {'salon':salon, 'users':users,'untreated_users':untreated_users,'accepted_users':accepted_users,'rejected_users':rejected_users}, context_instance=RequestContext(request))
+	untreated_users = User.get_untreated(salon.salon_id)
+	accepted_users = User.get_accepted(salon.salon_id)
+	rejected_users = User.get_rejected(salon.salon_id)
+	return render_to_response('salon/view.html', {'salon':salon, 'untreated_users':untreated_users,'accepted_users':accepted_users,'rejected_users':rejected_users}, context_instance=RequestContext(request))
 
 # ^salon/(?P<salon_id>[\w\d]+)/update/$
 def salon_update(request, salon_id):

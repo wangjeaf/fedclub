@@ -16,9 +16,6 @@
 <hr>
 <form id="bigForm" method="post">
 	{% csrf_token %}
-{% if not users %}
-还没有任何注册用户，点“增加用户”添加一个吧
-{% else %}
 <b>未处理用户信息：</b>
 <a href='javascript:void' onclick="acceptSelectedUsers()">通过所有选择的用户</a> ---
 <a href='javascript:void' onclick="rejectSelectedUsers()">拒绝所有选择的用户</a>
@@ -159,7 +156,6 @@
 	</tbody>
 </table>
 </form>
-{% endif %}
 <hr>
 
 <script type="text/javascript">
