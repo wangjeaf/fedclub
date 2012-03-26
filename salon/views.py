@@ -228,7 +228,11 @@ def user_reject_email(request, salon_id, user_id):
 def checkin(request, salon_code):
 	barcode = request.GET['barcode']
 	salon = Salon.objects.get(code = salon_code)
-	checking_user = User.objects.get(salon = salon,barcode=barcode)
+	try:
+		checking_user = User.objects.get(salon = salon,barcode=barcode)
+	except:
+		print 'barcode='+barcode+'user is not exist'	
+		return HttpResponse('barcode='+barcode+'user is not exist')
 	User.checkined(checking_user.user_id)
 	return HttpResponse('checkin')
 
