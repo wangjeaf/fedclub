@@ -40,7 +40,11 @@ def salon_add(request):
 def salon_get(request, salon_id):
 	salon = Salon.objects.get(code = salon_id)
 	users = User.objects.filter(salon = salon.salon_id)
-	return render_to_response('salon/view.html', {'salon':salon, 'users':users})
+	untreated_users = User.get_untreated()
+	accepted_users = User.get_accepted()
+	rejected_users = User.get_rejected()
+	print 'untreat:'+ str(len(untreated_users))
+	return render_to_response('salon/view.html', {'salon':salon, 'users':users,'untreated_users':untreated_users,'accepted_users':accepted_users,'rejected_users':rejected_users})
 
 # ^salon/(?P<salon_id>[\w\d]+)/update/$
 def salon_update(request, salon_id):
@@ -117,11 +121,15 @@ def user_update(request, salon_id, user_id):
 
 # ^salon/(?P<salon_id>[\w\d]+)/user/(?P<user_id>[\w\d]+)/accept$
 def user_accept(request, salon_id, user_id):
-	return HttpResponse('user_accept')
+	User.accept(user_id);
+	return HttpResponseRedirect('/salon/'+salon_id+'/');
+	#return HttpResponse('user_accept')
 
 # ^salon/(?P<salon_id>[\w\d]+)/user/(?P<user_id>[\w\d]+)/reject$
 def user_reject(request, salon_id, user_id):
-	return HttpResponse('user_reject')
+	User.reject(user_id);
+	return HttpResponseRedirect('/salon/'+salon_id+'/');
+	#return HttpResponse('user_reject')
 
 # ^salon/(?P<salon_id>[\w\d]+)/user/(?P<user_id>[\w\d]+)/email$
 def user_email(request, salon_id, user_id):
