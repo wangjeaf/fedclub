@@ -1,5 +1,5 @@
+#encoding=utf-8
 # Create your views here.
-
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import Context, loader
 from salon.models import Salon, User
@@ -226,13 +226,15 @@ def user_reject_email(request, salon_id, user_id):
 def checkin(request, salon_code):
 	barcode = request.GET['barcode']
 	salon = Salon.objects.get(code = salon_code)
+	msg=''	
 	try:
 		checking_user = User.objects.get(salon = salon,barcode=barcode)
 	except:
-		print 'barcode='+barcode+'user is not exist'	
-		return HttpResponse('barcode='+barcode+'user is not exist')
-	User.checkined(checking_user.user_id)
-	return HttpResponse(checking_user.name + ' checkined')
+		msg=u"二维码  "+unicode(barcode)+u"  对应的用户不存在!"
+	else:
+		User.checkined(checking_user.user_id)
+		msg=unicode(checking_user.name)+u" 已在 "+unicode(salon.code)+u" 签到成功!"
+	return render_to_response('salon/checkin_manual.html',{"salon_code":salon_code,"msg":msg})
 
 def checkin_manual(request, salon_code):
 	salon = Salon.objects.get(code = salon_code)
