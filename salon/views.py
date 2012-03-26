@@ -230,5 +230,6 @@ def checkin(request, salon_code):
 	User.checkined(checking_user.user_id)
 	return HttpResponse(checking_user.name + ' checkined')
 
-def checkin_manual(request, salon_id):
-	return HttpResponse('checkin')
+def checkin_manual(request, salon_code):
+	salon = Salon.objects.get(code = salon_code)
+	return render_to_response('salon/checkin_manual.html',{"salon_code":salon_code})
