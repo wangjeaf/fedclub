@@ -99,7 +99,7 @@
 					{% endif %}
 					{% if user.status == 11 %}
 					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/accept_email'>重新发邮件</a>
-					<a href='/salon/{{salon.code}}/checkin?barcode="{{user.barcode}}"'>签到</a>
+					<a href='/salon/{{salon.code}}/checkin?barcode={{user.barcode}}'>签到</a>
 					{% endif %}
 				</td>
 			</tr>

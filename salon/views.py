@@ -228,7 +228,7 @@ def checkin(request, salon_code):
 	salon = Salon.objects.get(code = salon_code)
 	checking_user = User.objects.get(salon = salon,barcode=barcode)
 	User.checkined(checking_user.user_id)
-	return HttpResponse('checkin')
+	return HttpResponse(checking_user.name + ' checkined')
 
 def checkin_manual(request, salon_id):
 	return HttpResponse('checkin')
