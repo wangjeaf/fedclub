@@ -73,7 +73,7 @@ def send_mail(salon, user):
 	me = 'no-reply.fed' + "<no-reply.fed@renren-inc.com>"
 
 	# other 
-	msg_root['subject'] = Header('第一届人人前端技术沙龙', 'utf-8')  
+	msg_root['subject'] = Header('第一届人人前端技术沙龙邀请函', 'utf-8')  
 	msg_root['from'] = me
 	msg_root['date'] = formatdate()
 
