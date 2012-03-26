@@ -39,13 +39,10 @@ def salon_add(request):
 # ^salon/(?P<salon_id>[\w\d]+)/$
 def salon_get(request, salon_id):
 	salon = Salon.objects.get(code = salon_id)
-	salon_code=salon.code
-	users = User.objects.filter(salon = salon.salon_id)
-	untreated_users = User.get_untreated()
-	accepted_users = User.get_accepted()
-	rejected_users = User.get_rejected()
-	print 'untreat:'+ str(len(untreated_users))
-	return render_to_response('salon/view.html', {'salon':salon,'salon_code':salon_code, 'users':users,'untreated_users':untreated_users,'accepted_users':accepted_users,'rejected_users':rejected_users}, context_instance=RequestContext(request))
+	untreated_users = User.get_untreated(salon.salon_id)
+	accepted_users = User.get_accepted(salon.salon_id)
+	rejected_users = User.get_rejected(salon.salon_id)
+	return render_to_response('salon/view.html', {'salon':salon, 'salon_code':salon.code, 'untreated_users':untreated_users,'accepted_users':accepted_users,'rejected_users':rejected_users}, context_instance=RequestContext(request))
 
 # ^salon/(?P<salon_id>[\w\d]+)/update/$
 def salon_update(request, salon_id):
@@ -69,14 +66,15 @@ def users_add(request, salon_id):
 	except(KeyError):
 		return render_to_response('user/add.html', {'salon_id':salon_id}, context_instance=RequestContext(request))
 	else:
+		salon = Salon.objects.get(code = salon_id)
 		user = User()
-		user.salon = Salon.objects.get(salon_id = salon_id)
+		user.salon = salon
 		user.name = request.POST['name']
 		user.company = request.POST['company']
 		user.mobile = request.POST['mobile']
 		user.email = request.POST['email']
 		user.introduction = request.POST['introduction']
-		user.barcode = '1111'
+		user.barcode = gen_barcode_md5(salon, user)
 		user.register_time = datetime.datetime.today()
 		user.status = 0
 		user.save()
@@ -141,8 +139,8 @@ def users_accept_email(request, salon_id):
 		user_ids = request.POST.getlist('select_accepted_users')
 		for user_id in user_ids:
 			user = User.objects.get(user_id = user_id)
-			send_mail(salon, user)
-			if (user.status != 11):
+			if (user.status == 10):
+				send_mail(salon, user)
 				user.status = 11
 				user.save()
 
@@ -155,8 +153,8 @@ def users_reject_email(request, salon_id):
 		user_ids = request.POST.getlist('select_rejected_users')
 		for user_id in user_ids:
 			user = User.objects.get(user_id = user_id)
-			send_mail(salon, user)
-			if (user.status != 21):
+			if (user.status == 20):
+				send_mail(salon, user)
 				user.status = 21
 				user.save()
 
@@ -234,7 +232,7 @@ def checkin(request, salon_code):
 		print 'barcode='+barcode+'user is not exist'	
 		return HttpResponse('barcode='+barcode+'user is not exist')
 	User.checkined(checking_user.user_id)
-	return HttpResponse('checkin')
+	return HttpResponse(checking_user.name + ' checkined')
 
 def checkin_manual(request, salon_code):
 	salon = Salon.objects.get(code = salon_code)

@@ -1,5 +1,4 @@
-<a href='/'>返回首页</a> <a href="/salon/{{salon_code}}/checkin_manual">手动签到</a><hr>
-
+<a href='/'>返回首页</a>, <a href="/salon/{{salon_code}}/checkin_manual">手动签到</a><hr>
 {% if message %}
 <div style="color:red;border:1px dashed red;font-weight:bold;">{{message}}</div>
 {% endif%}
@@ -7,18 +6,16 @@
 <table border = 1>
 	<tr><td>代号<td>{{salon.code}}</td></tr>
 	<tr><td>名称<td>{{salon.name}}</td></tr>
-	<tr><td>开始时间<td>{{salon.start_time}}</td></tr>
-	<tr><td>结束时间<td>{{salon.end_time}}</td></tr>
+	<tr><td>开始时间<td>{{salon.start_time|date:"Y年m月d日 H时i分"}}</td></tr>
+	<tr><td>结束时间<td>{{salon.end_time|date:"Y年m月d日 H时i分"}}</td></tr>
 	<tr><td>创建人<td>{{salon.creator}}</td></tr>
 	<tr><td>描述<td>{{salon.description}}</td></tr>
 	<tr><td>活动地址<td>{{salon.address}}</td></tr>
 <table>
+<a href='/salon/{{salon.code}}/users/add/'>增加用户</a><br>
+<hr>
 <form id="bigForm" method="post">
 	{% csrf_token %}
-<hr>
-{% if not users %}
-还没有任何注册用户，点“增加用户”添加一个吧
-{% else %}
 <b>未处理用户信息：</b>
 <a href='javascript:void' onclick="acceptSelectedUsers()">通过所有选择的用户</a> ---
 <a href='javascript:void' onclick="rejectSelectedUsers()">拒绝所有选择的用户</a>
@@ -58,7 +55,7 @@
 		</tr>
 	</tbody>
 </table>
-<br><hr><b>已同意用户信息：</b>
+<br><hr><b>已通过用户信息：</b>
 <a href='javascript:void' onclick="sendAcceptEmails()">发邮件给所有选中的“已通过未发邮件”用户</a> --- 
 <a href='javascript:void' onclick="resetSelectedUsers_accept()">重置所有选择的用户（已发邮件者不能重置）</a>
 <table border = 1>
@@ -102,7 +99,7 @@
 					{% endif %}
 					{% if user.status == 11 %}
 					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/accept_email'>重新发邮件</a>
-					<a href='/salon/{{salon.code}}/checkin?barcode="{{user.barcode}}"'>签到</a>
+					<a href='/salon/{{salon.code}}/checkin?barcode={{user.barcode}}'>签到</a>
 					{% endif %}
 				</td>
 			</tr>
@@ -159,9 +156,7 @@
 	</tbody>
 </table>
 </form>
-{% endif %}
 <hr>
-<a href='/salon/{{salon.salon_id}}/users/add/'>增加用户</a>
 
 <script type="text/javascript">
 	function selectAll(element, name) {
