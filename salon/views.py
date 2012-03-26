@@ -140,8 +140,8 @@ def users_accept_email(request, salon_id):
 		user_ids = request.POST.getlist('select_accepted_users')
 		for user_id in user_ids:
 			user = User.objects.get(user_id = user_id)
-			send_mail(salon, user)
-			if (user.status != 11):
+			if (user.status == 10):
+				send_mail(salon, user)
 				user.status = 11
 				user.save()
 
@@ -154,8 +154,8 @@ def users_reject_email(request, salon_id):
 		user_ids = request.POST.getlist('select_rejected_users')
 		for user_id in user_ids:
 			user = User.objects.get(user_id = user_id)
-			send_mail(salon, user)
-			if (user.status != 21):
+			if (user.status == 20):
+				send_mail(salon, user)
 				user.status = 21
 				user.save()
 
