@@ -1,5 +1,9 @@
 <a href='/'>返回首页</a>, <a href='/salon/{{salon_code}}/'>返回沙龙</a>
+{% if msg %}
+<div style="color:red;border:1px dashed red;font-weight:bold;padding:3px;margin-top:3px;">{{msg}}</div>
+{% endif%}
 <hr>
 <form action="/salon/{{salon_code}}/checkin" method="get">
+	<input type="hidden" name="edit_type" value="checkin_manual" />
 	<label for="code">二维码：</label><input type="text" name="barcode"/><input type="submit" value="签到" />
 </form>

@@ -1,5 +1,5 @@
+#encoding=utf-8
 # Create your views here.
-
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import Context, loader
 from salon.models import Salon, User
@@ -75,7 +75,7 @@ def users_add(request, salon_id):
 		user.email = request.POST['email']
 		users = User.objects.filter(salon = salon.salon_id, email = user.email)
 		if len(users) != 0:
-			error_message = 'ERROR : email "' + user.email + '" is already registered'
+			error_message = u"邮箱 %s 已经注册过了" % user.email
 			return salon_get(request, user.salon.code, error_message);
 
 		user.introduction = request.POST['introduction']
@@ -231,9 +231,15 @@ def user_reject_email(request, salon_id, user_id):
 def checkin(request, salon_code):
 	barcode = request.GET['barcode']
 	salon = Salon.objects.get(code = salon_code)
-	checking_user = User.objects.get(salon = salon,barcode=barcode)
-	User.checkined(checking_user.user_id)
-	return salon_get(request, salon.code, checking_user.name + ' checkined');
+	msg=''	
+	try:
+		checking_user = User.objects.get(salon = salon,barcode=barcode)
+	except:
+		msg=u"二维码  "+unicode(barcode)+u"  对应的用户不存在!"
+	else:
+		User.checkined(checking_user.user_id)
+		msg=unicode(checking_user.name)+u" 已在 "+unicode(salon.code)+u" 签到成功!"
+	return render_to_response('salon/checkin_manual.html',{"salon_code":salon_code,"msg":msg})
 
 def checkin_manual(request, salon_code):
 	salon = Salon.objects.get(code = salon_code)
