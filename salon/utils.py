@@ -57,13 +57,14 @@ def send_mail(salon, user):
 	text_msg = MIMEText(email_content, 'html', 'utf-8')
 	msg_root.attach(text_msg)
 
- 	# append barcode image file as attachment
-	image_file = get_bar_code(salon.code, user.barcode);
-	image_content = open(image_file, 'rb').read();
-	image_att = MIMEImage(image_content, 'png')
-	image_att.add_header('Content-Disposition', 'attachment', filename='barcode.png')
-	image_att.add_header('Content-ID', '<bar_code_image>')    
-	msg_root.attach(image_att)
+	if (user.accepted()):
+		# append barcode image file as attachment
+		image_file = get_bar_code(salon.code, user.barcode);
+		image_content = open(image_file, 'rb').read();
+		image_att = MIMEImage(image_content, 'png')
+		image_att.add_header('Content-Disposition', 'attachment', filename='barcode.png')
+		image_att.add_header('Content-ID', '<bar_code_image>')    
+		msg_root.attach(image_att)
 
 	# to
 	# to_list = ('zhifu.wang@renren-inc.com', 'wentao.zhang@renren-inc.com;')
@@ -73,7 +74,10 @@ def send_mail(salon, user):
 	me = 'no-reply.fed' + "<no-reply.fed@renren-inc.com>"
 
 	# other 
-	msg_root['subject'] = Header('第一届人人前端技术沙龙邀请函', 'utf-8')  
+	if (user.accepted()):
+		msg_root['subject'] = Header('第一届人人前端技术沙龙邀请函', 'utf-8')  
+	else:
+		msg_root['subject'] = Header('第一届人人前端技术沙龙回复函', 'utf-8')  
 	msg_root['from'] = me
 	msg_root['date'] = formatdate()
 
