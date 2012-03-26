@@ -1,6 +1,6 @@
 <a href='/'>返回首页</a>, <a href="/salon/{{salon_code}}/checkin_manual">手动签到</a><hr>
 {% if message %}
-<div style="color:red;border:1px dashed red;font-weight:bold;">{{message}}</div>
+<div style="color:red;border:1px dashed red;font-weight:bold;padding:3px;">{{message}}</div>
 {% endif%}
 沙龙信息:
 <table border = 1>
@@ -90,6 +90,9 @@
 				{% endif %}
 				{% if user.status == 12 %}
 				<td>已签到</td>
+				{% endif %}
+				{% if user.status == 13 %}
+				<td>现场签到</td>
 				{% endif %}
 				<td>
 					{% if user.status == 10 %}

@@ -37,12 +37,12 @@ def salon_add(request):
 		return HttpResponseRedirect(reverse('home'))
 
 # ^salon/(?P<salon_id>[\w\d]+)/$
-def salon_get(request, salon_id):
+def salon_get(request, salon_id, message = None):
 	salon = Salon.objects.get(code = salon_id)
 	untreated_users = User.get_untreated(salon.salon_id)
 	accepted_users = User.get_accepted(salon.salon_id)
 	rejected_users = User.get_rejected(salon.salon_id)
-	return render_to_response('salon/view.html', {'salon':salon, 'salon_code':salon.code, 'untreated_users':untreated_users,'accepted_users':accepted_users,'rejected_users':rejected_users}, context_instance=RequestContext(request))
+	return render_to_response('salon/view.html', {'message':message, 'salon':salon, 'salon_code':salon.code, 'untreated_users':untreated_users,'accepted_users':accepted_users,'rejected_users':rejected_users}, context_instance=RequestContext(request))
 
 # ^salon/(?P<salon_id>[\w\d]+)/update/$
 def salon_update(request, salon_id):
@@ -73,10 +73,15 @@ def users_add(request, salon_id):
 		user.company = request.POST['company']
 		user.mobile = request.POST['mobile']
 		user.email = request.POST['email']
+		users = User.objects.filter(salon = salon.salon_id, email = user.email)
+		if len(users) != 0:
+			error_message = 'ERROR : email "' + user.email + '" is already registered'
+			return salon_get(request, user.salon.code, error_message);
+
 		user.introduction = request.POST['introduction']
 		user.barcode = gen_barcode_md5(salon, user)
 		user.register_time = datetime.datetime.today()
-		user.status = 0
+		user.status = 13
 		user.save()
 		return HttpResponseRedirect('/salon/' + user.salon.code + '/')
 
@@ -228,7 +233,7 @@ def checkin(request, salon_code):
 	salon = Salon.objects.get(code = salon_code)
 	checking_user = User.objects.get(salon = salon,barcode=barcode)
 	User.checkined(checking_user.user_id)
-	return HttpResponse(checking_user.name + ' checkined')
+	return salon_get(request, salon.code, checking_user.name + ' checkined');
 
 def checkin_manual(request, salon_code):
 	salon = Salon.objects.get(code = salon_code)

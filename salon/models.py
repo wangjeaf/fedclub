@@ -71,6 +71,7 @@ class User(models.Model):
 	# 4、已同意已发邮件已签到   12
 	# 5、已拒绝未发邮件 20
 	# 6、已拒绝已发邮件 21
+	# 7、现场注册用户   13
 	status = models.SmallIntegerField(default = 00)
 	
 	#二维码
