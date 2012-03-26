@@ -10,9 +10,9 @@ from django.core.urlresolvers import reverse
 import datetime
 
 # ^$
-def home(request):
+def home(request, message = None):
 	salons = Salon.objects.all()
-	return render_to_response('index.html', {'salons': salons})
+	return render_to_response('index.html', {'salons': salons, 'message': message})
 
 # ^salon/$
 def salon_list(request):
@@ -50,9 +50,9 @@ def salon_update(request, salon_id):
 # ^salon/(?P<salon_id>[\w\d]+)/delete/$
 def salon_delete(request, salon_id):
 	salon = Salon.objects.get(code = salon_id)
-	salon_name = salon.name
+	salon_code = salon.code
 	salon.delete()
-	return render_to_response('salon/delete_success.html', {'salon_name':salon_name})
+	return home(request, salon_code + u"删除成功！" )
 
 # many users
 # ^salon/(?P<salon_id>[\w\d]+)/users/$
