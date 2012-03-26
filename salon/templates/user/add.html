@@ -1,3 +1,5 @@
+<a href="/">返回首页</a>, <a href="/salon/{{salon_id}}/">返回沙龙</a>
+<hr>
 <form action="/salon/{{salon_id}}/users/add/" method="post">
 	{% csrf_token %}
 	<input type="hidden" name="edit_type" value="add" />
