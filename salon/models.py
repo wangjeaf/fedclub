@@ -140,6 +140,11 @@ class User(models.Model):
 	def unmailed(cls,user_id):
 		cls.__set_mail_flag__(user_id,0)
 
+	#设置user_id指定用户状态为已签到
+	@classmethod
+	def checkined(cls,user_id):
+		cls.__set_mail_flag__(user_id,2)
+
 	@classmethod
 	def __set_mail_flag__(cls,user_id,flag_num):
 		user = cls.objects.get(user_id=user_id)
