@@ -6,15 +6,16 @@
 <table border = 1>
 	<tr><td>代号<td>{{salon.code}}</td></tr>
 	<tr><td>名称<td>{{salon.name}}</td></tr>
-	<tr><td>开始时间<td>{{salon.start_time}}</td></tr>
-	<tr><td>结束时间<td>{{salon.end_time}}</td></tr>
+	<tr><td>开始时间<td>{{salon.start_time|date:"Y年m月d日 H时i分"}}</td></tr>
+	<tr><td>结束时间<td>{{salon.end_time|date:"Y年m月d日 H时i分"}}</td></tr>
 	<tr><td>创建人<td>{{salon.creator}}</td></tr>
 	<tr><td>描述<td>{{salon.description}}</td></tr>
 	<tr><td>活动地址<td>{{salon.address}}</td></tr>
 <table>
+<a href='/salon/{{salon.code}}/users/add/'>增加用户</a><br>
+<hr>
 <form id="bigForm" method="post">
 	{% csrf_token %}
-<hr>
 {% if not users %}
 还没有任何注册用户，点“增加用户”添加一个吧
 {% else %}
@@ -160,7 +161,6 @@
 </form>
 {% endif %}
 <hr>
-<a href='/salon/{{salon.salon_id}}/users/add/'>增加用户</a>
 
 <script type="text/javascript">
 	function selectAll(element, name) {

@@ -18,7 +18,8 @@ check_in_url = 'http://fed.d.xiaonei.com/salon/%s/users/checkin?barcode=%s'
 
 # 生成text对应的md5编码的前六位
 # text是由沙龙名称、用户名称、用户邮箱组合确定的
-def gen_barcode_md5(text):
+def gen_barcode_md5(salon, user):
+	text = salon.code + '_' + user.email
 	m = hashlib.md5()
 	m.update(text)
 	result = m.hexdigest()
@@ -72,7 +73,7 @@ def send_mail(salon, user):
 	me = 'no-reply.fed' + "<no-reply.fed@renren-inc.com>"
 
 	# other 
-	msg_root['subject'] = Header('欢迎来到人人FED技术沙龙', 'utf-8')  
+	msg_root['subject'] = Header('第一届人人前端技术沙龙', 'utf-8')  
 	msg_root['from'] = me
 	msg_root['date'] = formatdate()
 
@@ -97,4 +98,4 @@ if __name__ == '__main__':
 	#send_mail('RENREN', 'test', 'F32321D')
 	#send_mail('FED', 'test', 'FDKJ32123')
 
-	print gen_barcode_md5('FED_Salon_wangjeaf_wangjeaf@gmail.com')
+	# print gen_barcode_md5('FED_Salon_wangjeaf_wangjeaf@gmail.com')

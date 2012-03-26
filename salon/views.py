@@ -68,14 +68,15 @@ def users_add(request, salon_id):
 	except(KeyError):
 		return render_to_response('user/add.html', {'salon_id':salon_id}, context_instance=RequestContext(request))
 	else:
+		salon = Salon.objects.get(code = salon_id)
 		user = User()
-		user.salon = Salon.objects.get(salon_id = salon_id)
+		user.salon = salon
 		user.name = request.POST['name']
 		user.company = request.POST['company']
 		user.mobile = request.POST['mobile']
 		user.email = request.POST['email']
 		user.introduction = request.POST['introduction']
-		user.barcode = '1111'
+		user.barcode = gen_barcode_md5(salon, user)
 		user.register_time = datetime.datetime.today()
 		user.status = 0
 		user.save()
