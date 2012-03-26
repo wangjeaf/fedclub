@@ -1,4 +1,7 @@
 <a href='/'>返回首页</a><hr>
+{% if message %}
+<div style="color:red;border:1px dashed red;font-weight:bold;">{{message}}</div>
+{% endif%}
 沙龙信息:
 <table border = 1>
 	<tr><td>代号<td>{{salon.code}}</td></tr>
@@ -9,15 +12,20 @@
 	<tr><td>描述<td>{{salon.description}}</td></tr>
 	<tr><td>活动地址<td>{{salon.address}}</td></tr>
 <table>
+<form id="bigForm" method="post">
+	{% csrf_token %}
 <hr>
 {% if not users %}
 还没有任何注册用户，点“增加用户”添加一个吧
 {% else %}
 <b>未处理用户信息：</b>
+<a href='javascript:void' onclick="acceptSelectedUsers()">通过所有选择的用户</a> ---
+<a href='javascript:void' onclick="rejectSelectedUsers()">拒绝所有选择的用户</a>
+<!-- <a href='javascript:void' onclick="deleteSelectedUsers()">删除所有选择的用户</a> -->
 <table border = 1>
 	<thead>
 		<tr>
-			<td><input type="checkbox" name="select_all"/>全选</td>
+			<td><input type="checkbox" name="select_all" onclick="selectAll(this, 'select_untreated_users')"/>全选</td>
 			<td>姓名</td>
 			<td>公司名</td>
 			<td>手机</td>
@@ -31,15 +39,17 @@
 	<tbody>
 			{% for user in untreated_users %}
 			<tr>
-				<td><input type="checkbox" name="select_users" value="{{user.user_id}}"/></td>
+				<td><input type="checkbox" name="select_untreated_users" value="{{user.user_id}}"/></td>
 				<td>{{user.name}}</td>
-				<td>{{user.company}}</td>
+				<td><textarea readonly=readonly rows=1 cols=40 style="resize:vertical">{{user.company}}</textarea></td>
 				<td>{{user.mobile}}</td>
 				<td>{{user.email}}</td>
-				<td>{{user.introduction}}</td>
+				<td><textarea readonly=readonly rows=1 cols=40 style="resize:vertical">{{user.introduction}}</textarea></td>
 				<td>{{user.barcode}}</td>
-				<td>{{user.status}}</td>
-				<td><a href='/salon/{{salon.code}}/user/{{user.user_id}}/delete'>删除</a>, 
+				{% if user.status == 0 %}
+				<td>未处理</td>
+				{% endif %}
+				<td><a href='javascript:void()' onclick='deleteUser("/salon/{{salon.code}}/user/{{user.user_id}}/delete")'>删除</a>,
 					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/accept'>通过</a>, 
 					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/reject'>拒绝</a></td>
 			</tr>
@@ -48,10 +58,12 @@
 	</tbody>
 </table>
 <br><hr><b>已同意用户信息：</b>
+<a href='javascript:void' onclick="sendAcceptEmails()">发邮件给所有选中的“已通过未发邮件”用户</a> --- 
+<a href='javascript:void' onclick="resetSelectedUsers_accept()">重置所有选择的用户（已发邮件者不能重置）</a>
 <table border = 1>
 	<thead>
 		<tr>
-			<td><input type="checkbox" name="select_all"/>全选</td>
+			<td><input type="checkbox" name="select_all" onclick="selectAll(this, 'select_accepted_users')"/>全选</td>
 			<td>姓名</td>
 			<td>公司名</td>
 			<td>手机</td>
@@ -65,27 +77,45 @@
 	<tbody>
 			{% for user in accepted_users %}
 			<tr>
-				<td><input type="checkbox" name="select_users" value="{{user.user_id}}"/></td>
+				<td><input type="checkbox" name="select_accepted_users" value="{{user.user_id}}"/></td>
 				<td>{{user.name}}</td>
-				<td>{{user.company}}</td>
+				<td><textarea readonly=readonly rows=1 cols=40 style="resize:vertical">{{user.company}}</textarea></td>
 				<td>{{user.mobile}}</td>
 				<td>{{user.email}}</td>
-				<td>{{user.introduction}}</td>
+				<td><textarea readonly=readonly rows=1 cols=40 style="resize:vertical">{{user.introduction}}</textarea></td>
 				<td>{{user.barcode}}</td>
-				<td>{{user.status}}</td>
-				<td><a href='/salon/{{salon.code}}/user/{{user.user_id}}/delete'>删除</a>, 
-						<a href='/salon/{{salon.code}}/user/{{user.user_id}}/accept'>通过</a>, 
-					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/reject'>拒绝</a></td>
+				{% if user.status == 10 %}
+				<td>未发送邮件</td>
+				{% endif %}
+				{% if user.status == 11 %}
+				<td>已发送邮件</td>
+				{% endif %}
+				{% if user.status == 12 %}
+				<td>已签到</td>
+				{% endif %}
+				<td>
+					{% if user.status == 10 %}
+					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/reset'>重置</a>, 
+					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/reject'>拒绝</a>,
+					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/accept_email'>发邮件</a>
+					{% endif %}
+					{% if user.status == 11 %}
+					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/accept_email'>重新发邮件</a>
+					<a href='/salon/{{salon.code}}/checkin?barcode="{{user.barcode}}"'>签到</a>
+					{% endif %}
+				</td>
 			</tr>
 			{% endfor %}
 		</tr>
 	</tbody>
 </table>
 <br><hr><b>已拒绝用户信息：</b>
+<a href='javascript:void' onclick="sendRejectEmails()">发邮件给所有选中的“已拒绝未发邮件”用户</a> --- 
+<a href='javascript:void' onclick="resetSelectedUsers_reject()">重置所有选择的用户（已发邮件者不能重置）</a>
 <table border = 1>
 	<thead>
 		<tr>
-			<td><input type="checkbox" name="select_all"/>全选</td>
+			<td><input type="checkbox" name="select_all" onclick="selectAll(this, 'select_rejected_users')"/>全选</td>
 			<td>姓名</td>
 			<td>公司名</td>
 			<td>手机</td>
@@ -99,22 +129,88 @@
 	<tbody>
 			{% for user in rejected_users %}
 			<tr>
-				<td><input type="checkbox" name="select_users" value="{{user.user_id}}"/></td>
+				<td><input type="checkbox" name="select_rejected_users" value="{{user.user_id}}"/></td>
 				<td>{{user.name}}</td>
-				<td>{{user.company}}</td>
+				<td><textarea readonly=readonly rows=1 cols=40 style="resize:vertical">{{user.company}}</textarea></td>
 				<td>{{user.mobile}}</td>
 				<td>{{user.email}}</td>
-				<td>{{user.introduction}}</td>
+				<td><textarea readonly=readonly rows=1 cols=40 style="resize:vertical;">{{user.introduction}}</textarea></td>
 				<td>{{user.barcode}}</td>
-				<td>{{user.status}}</td>
-				<td><a href='/salon/{{salon.salon_id}}/user/{{user.user_id}}/delete'>删除</a>,
-					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/accept'>通过</a>, 
-					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/reject'>拒绝</a></td>
+				{% if user.status == 20 %}
+				<td>未发送邮件</td>
+				{% endif %}
+				{% if user.status == 21 %}
+				<td>已发送邮件</td>
+				{% endif %}
+				<td>
+					{% if user.status == 20 %}
+					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/reset'>重置</a>, 
+					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/accept'>通过</a>,
+					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/reject_email'>发邮件</a>
+					{% endif %}
+					{% if user.status == 21 %}
+					<a href='/salon/{{salon.code}}/user/{{user.user_id}}/reject_email'>重新发邮件</a>
+					{% endif %}
+				</td>
 			</tr>
 			{% endfor %}
 		</tr>
 	</tbody>
 </table>
+</form>
 {% endif %}
 <hr>
 <a href='/salon/{{salon.salon_id}}/users/add/'>增加用户</a>
+
+<script type="text/javascript">
+	function selectAll(element, name) {
+		var elements = document.getElementsByName(name);
+		for(var i=0, l=elements.length; i<l; i++) {
+			elements[i].checked = element.checked;
+		}
+	}
+
+	function deleteUser(url) {
+		if (confirm('确定要删除此用户么（不可恢复，慎用！）？')) {
+			window.location.href = url;
+		}
+	}
+	function batchProcess(checkboxName, message, url) {
+		var elements = document.getElementsByName(checkboxName);
+		var flag = false;
+		for(var i=0, l=elements.length; i<l; i++) {
+			if (elements[i].checked) {
+				flag = true;
+				break;
+			}
+		}
+		if (!flag) {
+			alert("请选择用户信息");
+			return;
+		}
+		if (confirm(message)) {
+			var form = document.getElementById('bigForm');
+			form.action = url;
+			form.submit();
+		}
+	}
+
+	function acceptSelectedUsers() {
+		batchProcess("select_untreated_users", "确定要给通过选中的用户么？", "/salon/{{salon.code}}/users/accept/");
+	}
+	function rejectSelectedUsers() {
+		batchProcess("select_untreated_users", "确定要给拒绝选中的用户么？", "/salon/{{salon.code}}/users/reject/");
+	}
+	function resetSelectedUsers_accept() {
+		batchProcess("select_accepted_users", "确定要给重置选中的用户么？", "/salon/{{salon.code}}/users/reset/");
+	}
+	function resetSelectedUsers_reject() {
+		batchProcess("select_rejected_users", "确定要给重置选中的用户么？", "/salon/{{salon.code}}/users/reset/");
+	}
+	function sendAcceptEmails() {
+		batchProcess("select_accepted_users", "确定要给所有选中的用户发接受邮件么？", "/salon/{{salon.code}}/users/accept_email/");
+	}
+	function sendRejectEmails() {
+		batchProcess("select_rejected_users", "确定要给所有选中的用户发拒绝邮件么？", "/salon/{{salon.code}}/users/reject_email/");
+	}
+</script>
