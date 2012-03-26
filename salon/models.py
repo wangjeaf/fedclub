@@ -115,11 +115,12 @@ class User(models.Model):
 
 	@classmethod
 	def get_accepted(cls):
-		return cls.objects.filter(status__gt = 9,status__lt = 20)
+		return cls.objects.filter(status__gt = 9,status__lt = 20).order_by('status')
 
 	@classmethod
 	def get_rejected(cls):
-		return cls.objects.filter(status__gt = 19)	
+		return cls.objects.filter(status__gt = 19).order_by('status')
+
 	#接受user_id指定用户的申请	
 	@classmethod
 	def accept(cls,user_id):
