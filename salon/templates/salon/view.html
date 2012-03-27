@@ -14,6 +14,7 @@
 <table>
 <a href='/salon/{{salon.code}}/users/add/'>增加用户</a><br>
 <hr>
+<div style="color:red;border:1px dashed red;font-weight:bold;padding:3px;">为了避免因为测试，导致给用户发送了错误的邮件，目前所有邮件都发送至zhifu.wang@renren-inc.com，实际使用时请联系zhifu.wang并打开此限制</div>
 <form id="bigForm" method="post">
 	{% csrf_token %}
 <b>未处理用户信息：</b>
