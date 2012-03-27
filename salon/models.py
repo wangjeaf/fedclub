@@ -72,6 +72,7 @@ class User(models.Model):
 	# 5、已拒绝未发邮件 20
 	# 6、已拒绝已发邮件 21
 	# 7、现场注册用户   13
+	# 8、已删除         -1
 	status = models.SmallIntegerField(default = 00)
 	
 	#二维码

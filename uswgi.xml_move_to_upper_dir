@@ -1,0 +1,15 @@
+<uwsgi>
+  <socket>10.2.74.100:3031</socket>
+  <master>true</master>
+  <pidfile>/var/lib/nginx/uwsgi/uwsgi.pid</pidfile>
+  <gid>uwsgi</gid>
+  <uid>uwsgi</uid>
+  <processes>4</processes>
+  <pythonpath>/opt/salon/fedclub</pythonpath>
+  <module>wsgi</module>   
+  <profiler>true</profiler>
+  <memory-report>true</memory-report>
+  <enable-threads>true</enable-threads>
+  <logdate>true</logdate>
+  <limit-as>512</limit-as>
+</uwsgi>

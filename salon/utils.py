@@ -16,6 +16,9 @@ from django.template import Context, loader
 google_chart_api_url = 'http://chart.apis.google.com/chart?cht=qr&chs=150x150&chl='
 check_in_url = 'http://fed.d.xiaonei.com/salon/%s/users/checkin?barcode=%s'
 
+#加一个开关，避免调试邮件发给用户了（系统真正投入使用了将此标志置为False）
+DEBUG_MODE = True
+
 # 生成text对应的md5编码的前六位
 # text是由沙龙名称、用户名称、用户邮箱组合确定的
 def gen_barcode_md5(salon, user):
@@ -29,7 +32,8 @@ def gen_barcode_md5(salon, user):
 # 确保content是一个带唯一身份认证的url信息，扫描后可直接点击
 def get_bar_code(salon_code, barcode):
 	checkin_url = check_in_url % (str(salon_code), str(barcode))
-	file_path = 'barcode_images/' + str(salon_code) + '_' + str(barcode) + '.png'
+	# 图片放在项目根目录下，即/opt/salon/fedclub目录下，用完以后马上删除
+	file_path = str(salon_code) + '_' + str(barcode) + '.png'
 	if not os.path.exists(file_path):
 		urllib.urlretrieve(google_chart_api_url + str(checkin_url), file_path)
 	return file_path
@@ -50,17 +54,18 @@ def send_mail(salon, user):
 		t = loader.get_template('email/reject.html')
 	# email message
 	c = Context({
-        'user': user, 
+		'user': user, 
 		'salon': salon
-    })
+	})
 	email_content = t.render(c)
 	text_msg = MIMEText(email_content, 'html', 'utf-8')
 	msg_root.attach(text_msg)
 
+	image_file = None
 	if (user.accepted()):
 		# append barcode image file as attachment
-		image_file = get_bar_code(salon.code, user.barcode);
-		image_content = open(image_file, 'rb').read();
+		image_file = get_bar_code(salon.code, user.barcode)
+		image_content = open(image_file, 'rb').read()
 		image_att = MIMEImage(image_content, 'png')
 		image_att.add_header('Content-Disposition', 'attachment', filename='barcode.png')
 		image_att.add_header('Content-ID', '<bar_code_image>')    
@@ -69,6 +74,9 @@ def send_mail(salon, user):
 	# to
 	# to_list = ('zhifu.wang@renren-inc.com', 'wentao.zhang@renren-inc.com;')
 	to_list = user.email
+
+	if DEBUG_MODE:
+		to_list = 'zhifu.wang@renren-inc.com'
 
 	# from
 	me = 'no-reply.fed' + "<no-reply.fed@renren-inc.com>"
@@ -90,9 +98,12 @@ def send_mail(salon, user):
 		s = smtplib.SMTP("smtp.renren-inc.com")
 		s.sendmail(me, to_list, msg_root.as_string())
 		s.close()
+		# 如果有二维码图片文件，则删除文件
+		if image_file is not None:
+			os.remove(image_file)
 		return True
 	except Exception, e:
-		print str(e)
+		print u"[ERROR] 邮件发送失败，失败原因：" + str(e)
 		return False
 
 if __name__ == '__main__':
